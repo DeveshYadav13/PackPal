@@ -8,11 +8,29 @@ const initialItems = [
   { id: 2, description: "Charger", quantity: 2, packed: false },
 ];
 
+
+function App() {
+  const [items, setItems] = useState([]);
+  
+  function handleAddItems(item){
+    setItems(items=>[...items, item]);
+  }
+
+  return (
+    <div className="App">
+      <Logo/>
+      <Form onAddItems={handleAddItems} />
+      <PackingList items={items}/>
+      <Stats/>
+    </div>
+  );
+}
+
 function Logo() {
   return <h1>🏝️ Pack Pal 🧳</h1>
 }
 
-function Form() {
+function Form({onAddItems}) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
 
@@ -23,6 +41,7 @@ function Form() {
 
     const newItem = {description, quantity, packed:false, id:Date.now()};
     
+    onAddItems(newItem);
     setDescription("");
     setQuantity(1);
   }
@@ -52,11 +71,11 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({items}) {
   return (
     <div className="list">
       <ul >
-        {initialItems.map((item)=>(
+        {items.map((item)=>(
           <Item item={item} key={item.id} />
         ))}
       </ul>
@@ -81,15 +100,5 @@ function Stats(){
   );
 }
 
-function App() {
-  return (
-    <div className="App">
-      <Logo/>
-      <Form/>
-      <PackingList/>
-      <Stats/>
-    </div>
-  );
-}
 
 export default App;
